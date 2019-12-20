@@ -1,20 +1,22 @@
-def get_all_patturn(cx_count,deck_sum)
-  ret=[]
-  if cx_count==1
-    for i in 1..deck_sum
-      ret<<[i]
-    end
-    return ret
-  else
-    for i in 1..deck_sum
-      for ind in get_all_patturn(cx_count-1,deck_sum-i)
-        ret << ind.push(deck_sum-i+1)
-      end
-    end
-  end
-  ret
+# frozen_string_literal: true
+
+require './create_result'
+require './calc/decks'
+require './calc/patterns'
+require 'benchmark'
+
+include CreateResult
+
+def main
+  patterns = Patterns.new(:basic3)
+  # patterns.create
+  decks = Decks.new(:basic3)
+  decks.create
+  ret = create_cases(patterns, decks)
+  pp ret
 end
 
-te= get_all_patturn(3,8)
-p te
-p te.length()
+result = Benchmark.realtime do
+  main
+end
+puts "処理概要 #{result}s"
