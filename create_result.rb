@@ -4,12 +4,12 @@ require './calc/case'
 require 'parallel'
 
 module CreateResult
-  def create_cases(patterns, deck_master)
+  def create_cases(patterns, deck_master,mode=0)
     Parallel.map(deck_master.d_hash, in_processes: 10) do |key, decks|
       p_cases = Parallel.map(patterns.p_array, in_processes: 10) do |pattern|
         cases = Parallel.map(decks, in_processes: 10) do |deck|
           sample_case = Case.new(deck, pattern)
-          sample_case.resolve_pattern
+          sample_case.resolve_pattern(mode)
           sample_case.result
         end
         create_case_result(pattern, cases)
@@ -36,7 +36,7 @@ module CreateResult
   def create_pattern_result(pattern_cases, case_count)
     source = pattern_cases.group_by { |v| v[:damage_sum] }.max
     {
-      #detail: pattern_cases,
+      detail: pattern_cases,
       count: case_count,
       max_case: create_max_patterns(source,case_count),
       max_shots: create_max_shot(pattern_cases, case_count)

@@ -9,12 +9,12 @@ class Case
 
   attr_reader :result
 
-  def resolve_pattern
+  def resolve_pattern(mode)
     @cursol = 0
     @damage_sum = 0
     @cancel = []
     @pattern.each do |damage|
-      @cancel << get_cancel(damage)
+      @cancel << get_cancel(damage,mode)
     end
     @result = {
       source: @deck,
@@ -26,7 +26,9 @@ class Case
 
   private
 
-  def get_cancel(damage)
+  def get_cancel(damage,mode)
+    #mode = 4
+    damage = damage.select{|n|n>=mode-@damage_sum}.min || damage.max if damage.is_a?(Array)
     [*1..damage].each do |card|
       @cursol += 1
       return card if @deck.include?(@cursol)

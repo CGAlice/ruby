@@ -8,11 +8,11 @@ require 'benchmark'
 include CreateResult
 
 def main
-  patterns = Patterns.new(:basic3)
+  patterns = Patterns.new(:test7)
   # patterns.create
-  decks = Decks.new(:basic3)
+  decks = Decks.new(:test7)
   decks.create
-  ret = create_cases(patterns, decks)
+  ret = create_cases(patterns, decks,7)
   pp ret
 end
 
